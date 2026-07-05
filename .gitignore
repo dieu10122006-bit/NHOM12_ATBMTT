@@ -1,0 +1,11 @@
+venv/
+.env
+keys/*.pem
+received/
+logs/
+__pycache__/
+.pytest_cache/
+*.pyc
+test_crypto.py
+test_protocol.py
+test_db.py
