@@ -17,3 +17,5 @@ logs/*
 
 received/*
 !received/.gitkeep
+
+ca.pem

@@ -3,15 +3,22 @@ from mysql.connector import Error
 from common import config
 
 
+import os
+
+CA_CERT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ca.pem")
+
 def get_connection():
-    """Tạo và trả về kết nối MySQL mới."""
-    return mysql.connector.connect(
-        host=config.DB_HOST,
-        port=config.DB_PORT,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
-        database=config.DB_NAME
-    )
+    connect_args = {
+        "host": config.DB_HOST,
+        "port": config.DB_PORT,
+        "user": config.DB_USER,
+        "password": config.DB_PASSWORD,
+        "database": config.DB_NAME,
+    }
+    if os.path.exists(CA_CERT_PATH):
+        connect_args["ssl_ca"] = CA_CERT_PATH
+        connect_args["ssl_verify_cert"] = True
+    return mysql.connector.connect(**connect_args)
 
 
 def create_submission(student_id: int, assignment_id: int, ten_file: str, tong_so_chunk: int) -> int:
