@@ -148,3 +148,76 @@ def get_chunk_logs(submission_id):
     cursor.close()
     conn.close()
     return rows
+
+
+def create_student_account(ho_ten: str, msv: str, password_hash: str, public_key_pem: str) -> int:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO students (ho_ten, msv, password_hash, public_key) VALUES (%s, %s, %s, %s)",
+        (ho_ten, msv, password_hash, public_key_pem)
+    )
+    conn.commit()
+    student_id = cursor.lastrowid
+    cursor.close()
+    conn.close()
+    return student_id
+
+
+def get_student_by_id(student_id: int):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM students WHERE id = %s", (student_id,))
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return row
+
+
+def get_admin_by_username(username: str):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM admins WHERE username = %s", (username,))
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return row
+
+
+def get_all_students():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT id, ho_ten, msv, created_at FROM students ORDER BY created_at DESC")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+
+def get_stats():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT COUNT(*) AS total FROM students")
+    total_students = cursor.fetchone()["total"]
+
+    cursor.execute("SELECT COUNT(*) AS total FROM submissions")
+    total_submissions = cursor.fetchone()["total"]
+
+    cursor.execute("SELECT COUNT(*) AS total FROM submissions WHERE trang_thai = 'completed'")
+    total_completed = cursor.fetchone()["total"]
+
+    cursor.execute("SELECT COUNT(*) AS total FROM submissions WHERE trang_thai = 'failed'")
+    total_failed = cursor.fetchone()["total"]
+
+    cursor.execute("SELECT COUNT(*) AS total FROM chunk_logs WHERE ket_qua != 'valid'")
+    total_rejected_chunks = cursor.fetchone()["total"]
+
+    cursor.close()
+    conn.close()
+    return {
+        "total_students": total_students,
+        "total_submissions": total_submissions,
+        "total_completed": total_completed,
+        "total_failed": total_failed,
+        "total_rejected_chunks": total_rejected_chunks
+    }

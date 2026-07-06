@@ -7,7 +7,10 @@
 </head>
 <body class="bg-light">
 <div class="container py-5">
-  <h1 class="mb-4">🔒 Secure Assignment Chunk Transfer</h1>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>🔒 Secure Assignment Chunk Transfer</h1>
+  <div>Xin chao, <strong>{{ session['ho_ten'] }}</strong> ({{ session['msv'] }}) — <a href="{{ url_for('logout') }}">Dang xuat</a></div>
+</div>
 
   {% with messages = get_flashed_messages() %}
     {% if messages %}<div class="alert alert-warning">{{ messages[0] }}</div>{% endif %}

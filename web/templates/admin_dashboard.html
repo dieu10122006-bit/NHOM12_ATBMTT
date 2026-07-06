@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard - SACT</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🛡️ Trang quan tri SACT</h1>
+    <div>{{ session['admin_username'] }} — <a href="{{ url_for('admin_logout') }}">Dang xuat</a></div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-2"><div class="card text-center p-3"><h3>{{ stats.total_students }}</h3><small>Sinh vien</small></div></div>
+    <div class="col-md-2"><div class="card text-center p-3"><h3>{{ stats.total_submissions }}</h3><small>Luot nop</small></div></div>
+    <div class="col-md-2"><div class="card text-center p-3 border-success"><h3 class="text-success">{{ stats.total_completed }}</h3><small>Thanh cong</small></div></div>
+    <div class="col-md-2"><div class="card text-center p-3 border-danger"><h3 class="text-danger">{{ stats.total_failed }}</h3><small>That bai</small></div></div>
+    <div class="col-md-3"><div class="card text-center p-3 border-warning"><h3 class="text-warning">{{ stats.total_rejected_chunks }}</h3><small>Chunk bi tu choi</small></div></div>
+  </div>
+
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tab-submissions">Bai nop</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-students">Sinh vien</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="tab-submissions">
+      <table class="table table-bordered bg-white">
+        <thead><tr><th>ID</th><th>File</th><th>So chunk</th><th>Trang thai</th><th>Thoi gian</th><th></th></tr></thead>
+        <tbody>
+          {% for s in submissions %}
+          <tr>
+            <td>{{ s.id }}</td><td>{{ s.ten_file }}</td><td>{{ s.tong_so_chunk }}</td>
+            <td>
+              {% if s.trang_thai == "completed" %}<span class="badge bg-success">completed</span>
+              {% elif s.trang_thai == "failed" %}<span class="badge bg-danger">failed</span>
+              {% else %}<span class="badge bg-secondary">{{ s.trang_thai }}</span>{% endif %}
+            </td>
+            <td>{{ s.thoi_gian_nop }}</td>
+            <td><a href="{{ url_for('submission_detail', submission_id=s.id) }}" class="btn btn-sm btn-outline-primary">Chi tiet</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade" id="tab-students">
+      <table class="table table-bordered bg-white">
+        <thead><tr><th>ID</th><th>Ho ten</th><th>MSV</th><th>Ngay tao</th></tr></thead>
+        <tbody>
+          {% for st in students %}
+          <tr><td>{{ st.id }}</td><td>{{ st.ho_ten }}</td><td>{{ st.msv }}</td><td>{{ st.created_at }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
