@@ -18,4 +18,4 @@ logs/*
 received/*
 !received/.gitkeep
 
-ca.pem
+#ca.pem
