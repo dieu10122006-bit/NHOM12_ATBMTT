@@ -127,3 +127,24 @@ def add_assignment(ten_bai_tap: str, han_nop=None, mo_ta: str = "") -> int:
     cursor.close()
     conn.close()
     return assignment_id
+def get_all_submissions():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM submissions ORDER BY thoi_gian_nop DESC")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+
+def get_chunk_logs(submission_id):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT * FROM chunk_logs WHERE submission_id = %s ORDER BY chunk_index",
+        (submission_id,)
+    )
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
