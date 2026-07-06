@@ -1,30 +1,22 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>Chi tiet Submission</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container py-5">
-  <h1 class="mb-4">Chi tiet Submission #{{ submission_id }}</h1>
-  <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary mb-3">⬅ Quay lai danh sach</a>
-  <table class="table table-bordered bg-white">
-    <thead><tr><th>Chunk #</th><th>Hash</th><th>Ket qua</th><th>Thoi gian</th></tr></thead>
-    <tbody>
-      {% for c in chunk_logs %}
-      <tr>
-        <td>{{ c.chunk_index }}</td>
-        <td><code>{{ c.hash_chunk }}</code></td>
-        <td>
-          {% if c.ket_qua == "valid" %}<span class="badge bg-success">valid</span>
-          {% else %}<span class="badge bg-danger">{{ c.ket_qua }}</span>{% endif %}
-        </td>
-        <td>{{ c.thoi_gian }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% extends "base.html" %}
+{% block title %}Chi tiet - SACT{% endblock %}
+{% block content %}
+<div class="sact-container">
+  <div class="sact-title">Chi tiet Submission #{{ submission_id }}</div>
+  <div class="sact-card">
+    <table class="sact-table">
+      <thead><tr><th>Chunk #</th><th>Hash</th><th>Ket qua</th><th>Thoi gian</th></tr></thead>
+      <tbody>
+        {% for c in chunk_logs %}
+        <tr>
+          <td>{{ c.chunk_index }}</td>
+          <td><code>{{ c.hash_chunk }}</code></td>
+          <td><span class="sact-badge {{ c.ket_qua }}">{{ c.ket_qua }}</span></td>
+          <td>{{ c.thoi_gian }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-</body>
-</html>
+{% endblock %}

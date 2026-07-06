@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}SACT{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="sact-navbar">
+    <div class="brand"><span class="lock-icon">🔒</span> SACT — Secure Assignment Chunk Transfer</div>
+    <div class="nav-actions">
+      {% if session.get('student_id') %}
+        <span>{{ session['ho_ten'] }} ({{ session['msv'] }})</span>
+        <a href="{{ url_for('index') }}">Nop bai</a>
+        <a href="{{ url_for('dashboard') }}">Lich su</a>
+        <a href="{{ url_for('logout') }}">Dang xuat</a>
+      {% elif session.get('admin_id') %}
+        <span>Admin: {{ session['admin_username'] }}</span>
+        <a href="{{ url_for('admin_dashboard') }}">Trang quan tri</a>
+        <a href="{{ url_for('admin_logout') }}">Dang xuat</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Dang nhap</a>
+        <a href="{{ url_for('register') }}">Dang ky</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+</body>
+</html>

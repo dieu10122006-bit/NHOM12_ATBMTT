@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>SACT - Lich su nop bai</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container py-5">
-  <h1 class="mb-4">📊 Lich su nop bai</h1>
-  <a href="{{ url_for('index') }}" class="btn btn-outline-secondary mb-3">⬅ Quay lai</a>
-  <table class="table table-bordered bg-white">
-    <thead><tr><th>ID</th><th>File</th><th>So chunk</th><th>Trang thai</th><th>Thoi gian nop</th><th></th></tr></thead>
-    <tbody>
-      {% for s in submissions %}
-      <tr>
-        <td>{{ s.id }}</td>
-        <td>{{ s.ten_file }}</td>
-        <td>{{ s.tong_so_chunk }}</td>
-        <td>
-          {% if s.trang_thai == "completed" %}<span class="badge bg-success">completed</span>
-          {% elif s.trang_thai == "failed" %}<span class="badge bg-danger">failed</span>
-          {% else %}<span class="badge bg-secondary">{{ s.trang_thai }}</span>{% endif %}
-        </td>
-        <td>{{ s.thoi_gian_nop }}</td>
-        <td><a href="{{ url_for('submission_detail', submission_id=s.id) }}" class="btn btn-sm btn-outline-primary">Chi tiet</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+{% extends "base.html" %}
+{% block title %}Lich su - SACT{% endblock %}
+{% block content %}
+<div class="sact-container">
+  <div class="sact-title">📊 Lich su nop bai</div>
+  <div class="sact-card">
+    <table class="sact-table">
+      <thead><tr><th>ID</th><th>File</th><th>So chunk</th><th>Trang thai</th><th>Thoi gian</th><th></th></tr></thead>
+      <tbody>
+        {% for s in submissions %}
+        <tr>
+          <td>{{ s.id }}</td><td>{{ s.ten_file }}</td><td>{{ s.tong_so_chunk }}</td>
+          <td><span class="sact-badge {{ s.trang_thai }}">{{ s.trang_thai }}</span></td>
+          <td>{{ s.thoi_gian_nop }}</td>
+          <td><a href="{{ url_for('submission_detail', submission_id=s.id) }}" class="sact-btn outline" style="font-size:12px; padding:6px 12px;">Chi tiet</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-</body>
-</html>
+{% endblock %}

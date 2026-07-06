@@ -1,73 +1,53 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<title>SACT - Nop bai an toan</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-<div class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>🔒 Secure Assignment Chunk Transfer</h1>
-  <div>Xin chao, <strong>{{ session['ho_ten'] }}</strong> ({{ session['msv'] }}) — <a href="{{ url_for('logout') }}">Dang xuat</a></div>
-</div>
+{% extends "base.html" %}
+{% block title %}Nop bai - SACT{% endblock %}
+{% block content %}
+<div class="sact-container">
+  <div class="sact-title">📤 Nop bai tap</div>
+  <div class="sact-subtitle">File se duoc chia nho, ma hoa AES-256-GCM va ky so RSA-PSS truoc khi gui</div>
 
   {% with messages = get_flashed_messages() %}
-    {% if messages %}<div class="alert alert-warning">{{ messages[0] }}</div>{% endif %}
+    {% if messages %}<div class="sact-alert danger">{{ messages[0] }}</div>{% endif %}
   {% endwith %}
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <form method="POST" enctype="multipart/form-data" class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Chon file bai tap</label>
-          <input type="file" name="file" class="form-control" required>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Ma so sinh vien</label>
-          <input type="text" name="msv" class="form-control" value="SV001">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Ma bai tap</label>
-          <input type="number" name="assignment_id" class="form-control" value="1">
-        </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">📤 Nop bai</button>
-          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">📊 Xem lich su</a>
-        </div>
-      </form>
-    </div>
+  <div class="sact-card">
+    <form method="POST" enctype="multipart/form-data">
+      <label class="sact-label">Chon file bai tap</label>
+      <input type="file" name="file" class="sact-input" required>
+
+      <label class="sact-label">Ma bai tap</label>
+      <input type="number" name="assignment_id" class="sact-input" value="1">
+
+      <button type="submit" class="sact-btn">Nop bai</button>
+    </form>
   </div>
 
   {% if logs %}
-  <div class="card">
-    <div class="card-body">
-      <h5>Ket qua xu ly
-        {% if success %}<span class="badge bg-success">THANH CONG</span>
-        {% else %}<span class="badge bg-danger">THAT BAI</span>{% endif %}
-      </h5>
-      <ul class="list-group mt-3">
-        {% for type, data in logs %}
-          {% if type == "info" %}
-            <li class="list-group-item">ℹ️ {{ data }}</li>
-          {% elif type == "manifest" %}
-            <li class="list-group-item">📩 Phan hoi manifest: <code>{{ data }}</code></li>
-          {% elif type == "chunk" %}
-            {% if data.status == "valid" %}
-              <li class="list-group-item list-group-item-success">✅ Chunk #{{ data.index }} hop le</li>
-            {% else %}
-              <li class="list-group-item list-group-item-danger">❌ Chunk #{{ data.index }} — {{ data }}</li>
-            {% endif %}
-          {% elif type == "final" %}
-            <li class="list-group-item fw-bold">📦 Ket qua cuoi: <code>{{ data }}</code></li>
-          {% elif type == "error" %}
-            <li class="list-group-item list-group-item-danger">⚠️ {{ data }}</li>
+  <div class="sact-card">
+    <div class="sact-title" style="font-size:18px;">
+      Ket qua xu ly
+      {% if success %}<span class="sact-badge completed">THANH CONG</span>
+      {% else %}<span class="sact-badge failed">THAT BAI</span>{% endif %}
+    </div>
+    <div style="margin-top:16px;">
+      {% for type, data in logs %}
+        {% if type == "info" %}
+          <div class="sact-log-item info">ℹ️ {{ data }}</div>
+        {% elif type == "manifest" %}
+          <div class="sact-log-item info">📩 Manifest: {{ data }}</div>
+        {% elif type == "chunk" %}
+          {% if data.status == "valid" %}
+            <div class="sact-log-item ok">✅ Chunk #{{ data.index }} hop le</div>
+          {% else %}
+            <div class="sact-log-item error">❌ Chunk #{{ data.index }} — {{ data }}</div>
           {% endif %}
-        {% endfor %}
-      </ul>
+        {% elif type == "final" %}
+          <div class="sact-log-item final">📦 {{ data }}</div>
+        {% elif type == "error" %}
+          <div class="sact-log-item error">⚠️ {{ data }}</div>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
   {% endif %}
 </div>
-</body>
-</html>
+{% endblock %}
