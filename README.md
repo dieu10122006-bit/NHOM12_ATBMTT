@@ -1,5 +1,5 @@
 # Secure Assignment Chunk Transfer (SACT)
-
+# Link WEB cho Mọi Người TEST https://sact-nhom12-onrender-com.onrender.com/register
 Hệ thống truyền file bài tập bảo mật qua giao thức TCP tự thiết kế, sử dụng mã hóa lai (hybrid encryption) RSA + AES, chữ ký số RSA-PSS, và ghi log toàn bộ quá trình vào MySQL.
 
 ## Mục tiêu
