@@ -9,3 +9,11 @@ __pycache__/
 test_crypto.py
 test_protocol.py
 test_db.py
+keys/*
+!keys/.gitkeep
+
+logs/*
+!logs/.gitkeep
+
+received/*
+!received/.gitkeep
